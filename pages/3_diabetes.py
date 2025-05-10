@@ -7,7 +7,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # Load model
-st.set_page_config(page_title="Disease Dashboard", layout="wide")
+st.set_page_config(page_title="Disease Dashboard")
 st.title("🩺 Disease & Prediabetes Risk Prediction Dashboard")
 @st.cache_resource
 def load_model():
