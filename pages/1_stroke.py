@@ -65,9 +65,9 @@ with st.form(key='prediction_form'):
     with col6:
         age = st.slider("Select Age", min_value=1, max_value=100, step=1, value=50)
     with col7:
-        bmi = st.slider("Select BMI", min_value=10, max_value=35, step=1, value=20)
+        bmi = st.slider("Select BMI", min_value=10, max_value=38, step=1, value=20)
     with col8:
-        avg_glucose_level = st.slider("Select Avg Glucose Level", min_value=50, max_value=270, step=1, value=150)
+        avg_glucose_level = st.slider("Select Avg Glucose Level", min_value=50, max_value=200, step=1, value=150)
 
     submit_button = st.form_submit_button(label='predict')
 
