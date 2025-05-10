@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 from sklearn.model_selection import train_test_split
-from xgboost import XGBClassifier  
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 import time as time
 
@@ -12,29 +12,23 @@ st.title('Stroke Prediction System 🧠')
 image_url = "https://my.clevelandclinic.org/-/scassets/images/org/patient-experience/patient-stories/173-advanced-stroke-procedure-saves-patient-after-deep-brain-bleed/deep-brain-bleeds-new-2.gif"
 st.image(image_url, caption="Real-time visualization of a deep brain stroke — emphasizing the urgency of early detection and prevention.", use_container_width=True)
 
+
 data = pd.read_csv(r"data/df_cleaned_stroke.csv")
+
 
 columns_to_drop = ['work_type', 'Residence_type']
 data.drop(columns=columns_to_drop, axis=1, inplace=True)
-X = data.drop('stroke', axis=1)
-y = data['stroke']
+X = data.drop('stroke', axis=1)  # split features
+y = data['stroke']  # split target
 
-# تقسيم البيانات مع نفس المعلمات
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# استبدال النموذج بـ XGBoost
-model = XGBClassifier(
-    n_estimators=100,
-    learning_rate=0.1,
-    max_depth=3,
-    random_state=42,
-    eval_metric='logloss'
-)
-model.fit(X_train, y_train)
-y_pred = model.predict(X_test)
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train) 
+y_pred = model.predict(X_test) 
 accuracy = accuracy_score(y_pred, y_test)
 
-# باقي الكود يبقى كما هو بدون تغيير...
+
 with st.form(key='prediction_form'):
     st.subheader('Enter Patient Information 🧑‍⚕️📋📝💊')
 
@@ -71,11 +65,12 @@ with st.form(key='prediction_form'):
     with col6:
         age = st.slider("Select Age", min_value=1, max_value=100, step=1, value=50)
     with col7:
-        bmi = st.slider("Select BMI", min_value=10, max_value=37, step=1, value=20)
+        bmi = st.slider("Select BMI", min_value=10, max_value=38, step=1, value=20)
     with col8:
         avg_glucose_level = st.slider("Select Avg Glucose Level", min_value=50, max_value=200, step=1, value=150)
 
     submit_button = st.form_submit_button(label='predict')
+
 
 df = pd.DataFrame({
     'sex': [sex],
@@ -170,13 +165,13 @@ if submit_button:
 
     # عرض النتيجة والصورة
     if result == 1:
-        st.error(f"⚠️ The patient is at risk of stroke! with {perc}  ")
+        st.error(f"⚠️ The patient is at risk of stroke!  ")
         st.image("https://media.mehrnews.com/d/2018/11/05/4/2947868.jpg", width=600)
 
         # عرض النص التحذيري بعد الصورة
         st.write_stream(stream_data(end_text))
     else:
-        st.success(f"✅ The patient is not at risk of stroke. with {perc}  ")
+        st.success(f"✅ The patient is not at risk of stroke.  ")
         st.image("https://astrologer.swayamvaralaya.com/wp-content/uploads/2012/08/health1.jpg", width=600)
 
 
